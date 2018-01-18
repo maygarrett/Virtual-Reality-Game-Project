@@ -11,6 +11,11 @@ public class ControllerGrabObject : MonoBehaviour {
         get { return SteamVR_Controller.Input((int)_trackedObj.index); }
     }
 
+    private Quaternion _rotationValue = new Quaternion(-0.2706f, 0.65328f, 0.2706f, -0.65328f);
+
+    [SerializeField] private GameObject _controllerModel;
+    [SerializeField] private GameObject _cameraRig;
+
     // Object colliding with pickup trigger
     private GameObject _collidingObject;
     // actual object being held in hand
@@ -50,9 +55,17 @@ public class ControllerGrabObject : MonoBehaviour {
         {
             if(_objectInHand)
             {
-                if(_objectInHand.gameObject.tag == "Gun")
+                if (_objectInHand.gameObject.tag == "Gun")
                 {
+
+                    _objectInHand.transform.parent = GameObject.Find("Objects").GetComponent<Transform>();
                     ReleaseObject();
+                    _controllerModel.SetActive(true);
+
+                    if (GetComponent<FixedJoint>())
+                    {
+                        ReleaseObject();
+                    }
                 }
             }
         }
@@ -102,15 +115,26 @@ public class ControllerGrabObject : MonoBehaviour {
         // set object in hand to the object currently inside pick up trigger
         _objectInHand = _collidingObject;
         _collidingObject = null;
+
+        // handling gun case
+        if (_objectInHand.tag == "Gun")
+        {
+            //_objectInHand.transform.position = _controller.transform.pos;
+            //_objectInHand.transform.rotation = _controller.transform.rot;
+
+            _objectInHand.transform.parent = gameObject.transform;
+            _objectInHand.transform.localPosition = _controllerModel.transform.localPosition;
+            _objectInHand.transform.localRotation = _rotationValue;
+            
+
+            _controllerModel.gameObject.SetActive(false);
+        }
+
+
         // connecting the obect to user hand using a joint
         var joint = AddFixedJoint();
         joint.connectedBody = _objectInHand.GetComponent<Rigidbody>();
 
-        if(_objectInHand.tag == "Gun")
-        {
-            _objectInHand.transform.position = _controller.transform.pos;
-            _objectInHand.transform.rotation = _controller.transform.rot;
-        }
     }
 
     // function to add the fixed joint
@@ -142,5 +166,6 @@ public class ControllerGrabObject : MonoBehaviour {
     private void FireGun()
     {
         Debug.Log("Bang Bang");
+        _objectInHand.GetComponent<GunShot>().FireGun();
     }
 }

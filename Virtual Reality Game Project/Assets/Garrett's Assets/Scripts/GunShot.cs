@@ -33,31 +33,36 @@ public class GunShot : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space))
         {
 
-            RaycastHit hit;
-
-            Physics.Raycast(_raycastOrigin.position, _raycastOrigin.forward, out hit, 1000.0f);
-
-            _gunAnimation.Play();
-
-            if(hit.transform.gameObject.tag == "Metal")
-            {
-                if(_gunSparksCounter == 1)
-                {
-                    _gunSparks1.transform.position = hit.point;
-                    _gunSparks1System.Play();
-                    _gunSparksCounter = 2;
-                }
-                if(_gunSparksCounter == 2)
-                {
-                    _gunSparks2.transform.position = hit.point;
-                    _gunSparks2System.Play();
-                    _gunSparksCounter = 1;
-                }
-            }
+            FireGun();
                 
         }
 
         Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.forward * 100, Color.red);
 
+    }
+
+    public void FireGun()
+    {
+        RaycastHit hit;
+
+        Physics.Raycast(_raycastOrigin.position, _raycastOrigin.forward, out hit, 1000.0f);
+
+        _gunAnimation.Play();
+
+        if (hit.transform.gameObject.tag == "Metal")
+        {
+            if (_gunSparksCounter == 1)
+            {
+                _gunSparks1.transform.position = hit.point;
+                _gunSparks1System.Play();
+                _gunSparksCounter = 2;
+            }
+            if (_gunSparksCounter == 2)
+            {
+                _gunSparks2.transform.position = hit.point;
+                _gunSparks2System.Play();
+                _gunSparksCounter = 1;
+            }
+        }
     }
 }
