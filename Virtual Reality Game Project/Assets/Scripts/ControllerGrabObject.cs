@@ -40,7 +40,20 @@ public class ControllerGrabObject : MonoBehaviour {
         {
             if (_objectInHand)
             {
-                ReleaseObject();
+                if (_objectInHand.tag != "Gun")
+                    ReleaseObject();
+                else FireGun();
+            }
+        }
+
+        if (_controller.GetPressDown(SteamVR_Controller.ButtonMask.Grip))
+        {
+            if(_objectInHand)
+            {
+                if(_objectInHand.gameObject.tag == "Gun")
+                {
+                    ReleaseObject();
+                }
             }
         }
 
@@ -92,6 +105,12 @@ public class ControllerGrabObject : MonoBehaviour {
         // connecting the obect to user hand using a joint
         var joint = AddFixedJoint();
         joint.connectedBody = _objectInHand.GetComponent<Rigidbody>();
+
+        if(_objectInHand.tag == "Gun")
+        {
+            _objectInHand.transform.position = _controller.transform.pos;
+            _objectInHand.transform.rotation = _controller.transform.rot;
+        }
     }
 
     // function to add the fixed joint
@@ -118,5 +137,10 @@ public class ControllerGrabObject : MonoBehaviour {
         }
         // clear the variable
         _objectInHand = null;
+    }
+
+    private void FireGun()
+    {
+        Debug.Log("Bang Bang");
     }
 }
