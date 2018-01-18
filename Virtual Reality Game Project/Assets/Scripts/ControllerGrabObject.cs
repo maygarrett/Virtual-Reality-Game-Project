@@ -58,14 +58,10 @@ public class ControllerGrabObject : MonoBehaviour {
                 if (_objectInHand.gameObject.tag == "Gun")
                 {
 
-                    _objectInHand.transform.parent = GameObject.Find("Objects").GetComponent<Transform>();
-                    ReleaseObject();
+                    _objectInHand.transform.parent = null;
                     _controllerModel.SetActive(true);
+                    ReleaseObject();
 
-                    if (GetComponent<FixedJoint>())
-                    {
-                        ReleaseObject();
-                    }
                 }
             }
         }
@@ -119,13 +115,12 @@ public class ControllerGrabObject : MonoBehaviour {
         // handling gun case
         if (_objectInHand.tag == "Gun")
         {
-            //_objectInHand.transform.position = _controller.transform.pos;
-            //_objectInHand.transform.rotation = _controller.transform.rot;
 
             _objectInHand.transform.parent = gameObject.transform;
             _objectInHand.transform.localPosition = _controllerModel.transform.localPosition;
             _objectInHand.transform.localRotation = _rotationValue;
-            
+
+
 
             _controllerModel.gameObject.SetActive(false);
         }
