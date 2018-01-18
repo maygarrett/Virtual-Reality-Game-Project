@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/Garrett's Assets/Scenes/GunScene.unity
+  isLoaded: 1
+  isActive: 1
