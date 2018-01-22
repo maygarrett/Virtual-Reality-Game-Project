@@ -28,6 +28,9 @@ public class LaserPointer : MonoBehaviour {
     [SerializeField] private LayerMask _teleportMask;
     private bool _shouldTeleport;
 
+    private bool _isPaused = false;
+    [SerializeField] private Canvas _pauseMenuCanvas;
+
     void Awake()
     {
         _trackedObj = GetComponent<SteamVR_TrackedObject>();
@@ -71,6 +74,12 @@ public class LaserPointer : MonoBehaviour {
             Teleport();
         }
 
+        if(_controller.GetPressDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
+        {
+            Debug.Log("Recieving Controller Input");
+            PauseToggle();
+        }
+
 
     }
 
@@ -90,5 +99,22 @@ public class LaserPointer : MonoBehaviour {
         Vector3 tempDifference = _cameraRigTransform.position - _headTransform.position;
         tempDifference.y = 0;
         _cameraRigTransform.position = _hitPoint + tempDifference;
+    }
+
+    private void PauseToggle()
+    {
+        _isPaused = !_isPaused;
+
+        if(_isPaused)
+        {
+            Time.timeScale = 0;
+            _pauseMenuCanvas.gameObject.SetActive(true);
+        }
+
+        if(!_isPaused)
+        {
+            Time.timeScale = 1;
+            _pauseMenuCanvas.gameObject.SetActive(false);
+        }
     }
 }
