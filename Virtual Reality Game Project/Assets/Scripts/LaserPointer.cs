@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LaserPointer : MonoBehaviour {
 
@@ -28,8 +29,11 @@ public class LaserPointer : MonoBehaviour {
     [SerializeField] private LayerMask _teleportMask;
     private bool _shouldTeleport;
 
+    // pause menu stuff
     private bool _isPaused = false;
     [SerializeField] private Canvas _pauseMenuCanvas;
+    [SerializeField] private Transform _menuPositionPoint;
+    [SerializeField] private LayerMask _buttonMask;
 
     void Awake()
     {
@@ -49,10 +53,11 @@ public class LaserPointer : MonoBehaviour {
     void Update () {
 
 
-        if (_controller.GetPress(SteamVR_Controller.ButtonMask.Touchpad))
+        if (_controller.GetPress(SteamVR_Controller.ButtonMask.Touchpad) && !_isPaused)
         {
             RaycastHit hit;
 
+            // raycast for teleport
             if (Physics.Raycast(_trackedObj.transform.position, transform.forward, out hit, 100, _teleportMask))
             {
                 _hitPoint = hit.point;
@@ -62,6 +67,7 @@ public class LaserPointer : MonoBehaviour {
                 _teleportReticleTransform.position = _hitPoint + _teleportReticleOffset;
                 _shouldTeleport = true;
             }
+
         }
         else
         {
@@ -76,8 +82,28 @@ public class LaserPointer : MonoBehaviour {
 
         if(_controller.GetPressDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
         {
-            Debug.Log("Recieving Controller Input");
             PauseToggle();
+        }
+
+        if(_isPaused)
+        {
+            // always show laser pointer
+            RaycastHit hit;
+            if (Physics.Raycast(_trackedObj.transform.position, transform.forward, out hit, 100))
+            {
+                _hitPoint = hit.point;
+                ShowLaser(hit);
+            }
+
+            if(hit.transform.gameObject.tag == "Button")
+            {
+                Debug.Log("Hitting Button with raycast");
+                if(_controller.GetHairTriggerDown())
+                {
+                    Debug.Log("run the button's function");
+                    hit.transform.gameObject.GetComponent<Button>().onClick.Invoke();
+                }
+            }
         }
 
 
@@ -105,8 +131,11 @@ public class LaserPointer : MonoBehaviour {
     {
         _isPaused = !_isPaused;
 
+
         if(_isPaused)
         {
+            _pauseMenuCanvas.transform.position = _menuPositionPoint.position;
+            _pauseMenuCanvas.transform.LookAt(_headTransform);
             Time.timeScale = 0;
             _pauseMenuCanvas.gameObject.SetActive(true);
         }
