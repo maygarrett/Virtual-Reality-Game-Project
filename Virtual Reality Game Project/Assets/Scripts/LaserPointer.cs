@@ -34,6 +34,7 @@ public class LaserPointer : MonoBehaviour {
     [SerializeField] private Canvas _pauseMenuCanvas;
     [SerializeField] private Transform _menuPositionPoint;
     [SerializeField] private LayerMask _buttonMask;
+    [SerializeField] private MenuManager _menuManager;
 
     void Awake()
     {
@@ -85,6 +86,8 @@ public class LaserPointer : MonoBehaviour {
             PauseToggle();
         }
 
+
+        // pause menu interactions
         if(_isPaused)
         {
             // always show laser pointer
@@ -95,13 +98,23 @@ public class LaserPointer : MonoBehaviour {
                 ShowLaser(hit);
             }
 
-            if(hit.transform.gameObject.tag == "Button")
+            // if player aims at a button object
+            if(hit.transform.gameObject.layer == 9)
             {
-                Debug.Log("Hitting Button with raycast");
+                // Debug.Log("Hitting Button with raycast");
                 if(_controller.GetHairTriggerDown())
                 {
-                    Debug.Log("run the button's function");
-                    hit.transform.gameObject.GetComponent<Button>().onClick.Invoke();
+                    GameObject _buttonPressed = hit.transform.gameObject;
+                    // check what the button is
+                    if (_buttonPressed.name == "QuitGameButton")
+                    {
+                        _menuManager.QuitGame();
+                    }
+                    else if (_buttonPressed.name == "ResumeButton")
+                    {
+                        _menuManager.ResumeGame();
+                    }
+                    else Debug.LogError("something weird going on with button " + _buttonPressed.name);
                 }
             }
         }

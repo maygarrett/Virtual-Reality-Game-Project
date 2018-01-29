@@ -14,7 +14,7 @@ public class ControllerGrabObject : MonoBehaviour {
     private Quaternion _rotationValue = new Quaternion(-0.2706f, 0.65328f, 0.2706f, -0.65328f);
 
     [SerializeField] private GameObject _controllerModel;
-    [SerializeField] private GameObject _cameraRig;
+    // [SerializeField] private GameObject _cameraRig;
 
     // Object colliding with pickup trigger
     private GameObject _collidingObject;
