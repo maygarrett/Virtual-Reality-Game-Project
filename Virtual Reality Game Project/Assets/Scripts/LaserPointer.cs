@@ -29,12 +29,17 @@ public class LaserPointer : MonoBehaviour {
     [SerializeField] private LayerMask _teleportMask;
     private bool _shouldTeleport;
 
+    [SerializeField] private bool _isTeleportEnabled;
+
     // pause menu stuff
     private bool _isPaused = false;
     [SerializeField] private Canvas _pauseMenuCanvas;
     [SerializeField] private Transform _menuPositionPoint;
     [SerializeField] private LayerMask _buttonMask;
     [SerializeField] private MenuManager _menuManager;
+
+    // main menu variables
+    [SerializeField] private bool _isMenuScene;
 
     void Awake()
     {
@@ -76,19 +81,25 @@ public class LaserPointer : MonoBehaviour {
             _reticle.SetActive(false);
         }
 
-        if (_controller.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad) && _shouldTeleport)
+        if (_isTeleportEnabled)
         {
-            Teleport();
+            if (_controller.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad) && _shouldTeleport)
+            {
+                Teleport();
+            }
         }
 
-        if(_controller.GetPressDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
+        if (!_isMenuScene)
         {
-            PauseToggle();
+            if (_controller.GetPressDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
+            {
+                PauseToggle();
+            }
         }
 
 
         // pause menu interactions
-        if(_isPaused)
+        if(_isPaused || _isMenuScene)
         {
             // always show laser pointer
             RaycastHit hit;
@@ -113,6 +124,10 @@ public class LaserPointer : MonoBehaviour {
                     else if (_buttonPressed.name == "ResumeButton")
                     {
                         _menuManager.ResumeGame();
+                    }
+                    else if (_buttonPressed.name == "StartGameButton")
+                    {
+                        _menuManager.StartGame();
                     }
                     else Debug.LogError("something weird going on with button " + _buttonPressed.name);
                 }

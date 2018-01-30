@@ -8,3 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Mountains.unity
     guid: ed3a56ab20e5a9a40977e17d6f61840d
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: a0283115df9b2c5438eee25754d36bf6

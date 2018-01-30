@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour {
 
-    [SerializeField] private Canvas _pauseMenuCanvas;
+    [SerializeField] private Canvas _MenuCanvas;
 
 	// Use this for initialization
 	void Start () {
@@ -27,6 +27,11 @@ public class MenuManager : MonoBehaviour {
     public void ResumeGame()
     {
         Time.timeScale = 1;
-        _pauseMenuCanvas.gameObject.SetActive(false);
+        _MenuCanvas.gameObject.SetActive(false);
+    }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene(0);
     }
 }
