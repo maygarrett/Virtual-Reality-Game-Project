@@ -9,6 +9,7 @@ TagManager:
   - Metal
   - Gun
   - Button
+  - Key
   layers:
   - Default
   - TransparentFX
