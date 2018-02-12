@@ -63,6 +63,8 @@ public class GunShot : MonoBehaviour {
                 _gunSparks2System.Play();
                 _gunSparksCounter = 1;
             }
+
+            // if object is movable apply force from gun shot
         }
     }
 }
