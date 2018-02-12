@@ -127,7 +127,7 @@ public class LaserPointer : MonoBehaviour {
                     }
                     else if (_buttonPressed.name == "StartGameButton")
                     {
-                        _menuManager.StartGame();
+                        GameObject.FindObjectOfType<ScreenFader>().EndScene(0);
                     }
                     else Debug.LogError("something weird going on with button " + _buttonPressed.name);
                 }
