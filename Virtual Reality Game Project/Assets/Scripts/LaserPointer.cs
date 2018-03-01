@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LaserPointer : MonoBehaviour {
 
@@ -29,7 +30,7 @@ public class LaserPointer : MonoBehaviour {
     [SerializeField] private LayerMask _teleportMask;
     private bool _shouldTeleport;
 
-    [SerializeField] private bool _isTeleportEnabled;
+    // [SerializeField] private bool _isTeleportEnabled;
 
     // pause menu stuff
     private bool _isPaused = false;
@@ -58,14 +59,23 @@ public class LaserPointer : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
+        if(SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(0))
+        {
+            _isMenuScene = true;
+        }
+
 
         if (_controller.GetPress(SteamVR_Controller.ButtonMask.Touchpad) && !_isPaused)
         {
+            Debug.Log("Initiating Teleport");
+
             RaycastHit hit;
 
             // raycast for teleport
             if (Physics.Raycast(_trackedObj.transform.position, transform.forward, out hit, 100, _teleportMask))
             {
+                Debug.Log("teleport hit something teleportable");
+
                 _hitPoint = hit.point;
                 ShowLaser(hit);
 
@@ -81,13 +91,12 @@ public class LaserPointer : MonoBehaviour {
             _reticle.SetActive(false);
         }
 
-        if (_isTeleportEnabled)
-        {
+
             if (_controller.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad) && _shouldTeleport)
             {
                 Teleport();
             }
-        }
+
 
         if (!_isMenuScene)
         {
@@ -127,7 +136,7 @@ public class LaserPointer : MonoBehaviour {
                     }
                     else if (_buttonPressed.name == "StartGameButton")
                     {
-                        GameObject.FindObjectOfType<ScreenFader>().EndScene(0);
+                        GameObject.FindObjectOfType<ScreenFader>().EndScene(1);
                     }
                     else Debug.LogError("something weird going on with button " + _buttonPressed.name);
                 }
