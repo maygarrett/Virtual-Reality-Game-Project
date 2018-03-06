@@ -66,5 +66,14 @@ public class GunShot : MonoBehaviour {
 
             // if object is movable apply force from gun shot
         }
+
+        if(hit.transform.gameObject.tag == "Explosive")
+        {
+            //get reference to the explosion and set active
+            hit.transform.GetComponentInChildren<Transform>().gameObject.SetActive(true);
+
+            // destroy the hit.gameobject
+            Destroy(hit.transform.gameObject);
+        }
     }
 }

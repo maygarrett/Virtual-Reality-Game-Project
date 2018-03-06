@@ -10,6 +10,10 @@ TagManager:
   - Gun
   - Button
   - Key
+  - Explosive
+  - CanDestroy
+  - Robot
+  - PickUp
   layers:
   - Default
   - TransparentFX

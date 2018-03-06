@@ -74,7 +74,7 @@ public class ControllerGrabObject : MonoBehaviour {
     private void SetCollidingObject(Collider col)
     {
         // if the object already exists or doesnt have a rigidbody, return
-        if (_collidingObject || !col.GetComponent<Rigidbody>())
+        if (_collidingObject || !col.GetComponent<Rigidbody>() || col.gameObject.tag != "PickUp" || col.gameObject.tag != "Key" || col.gameObject.tag != "Gun")
         {
             return;
         }
@@ -162,5 +162,10 @@ public class ControllerGrabObject : MonoBehaviour {
     {
         Debug.Log("Bang Bang");
         _objectInHand.GetComponent<GunShot>().FireGun();
+    }
+
+    public GameObject GetObjectInHand()
+    {
+        return _objectInHand;
     }
 }

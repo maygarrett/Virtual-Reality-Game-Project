@@ -13,6 +13,10 @@ public class LaserPointer : MonoBehaviour {
         get { return SteamVR_Controller.Input((int)_trackedObj.index); }
     }
 
+    //reference to both controllers grab object script
+    [SerializeField] private ControllerGrabObject _controller1Grab;
+    [SerializeField] private ControllerGrabObject _controller2Grab;
+
     //laserpointer stuff
     [SerializeField] private GameObject _laserPrefab;
     private GameObject _laser;
@@ -59,12 +63,13 @@ public class LaserPointer : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
+        // confirming menu scene
         if(SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(0))
         {
             _isMenuScene = true;
         }
 
-
+        // aiming the teleport lazer pointer
         if (_controller.GetPress(SteamVR_Controller.ButtonMask.Touchpad) && !_isPaused)
         {
             Debug.Log("Initiating Teleport");
@@ -74,14 +79,19 @@ public class LaserPointer : MonoBehaviour {
             // raycast for teleport
             if (Physics.Raycast(_trackedObj.transform.position, transform.forward, out hit, 100, _teleportMask))
             {
-                Debug.Log("teleport hit something teleportable");
-
-                _hitPoint = hit.point;
+                //show laser first
                 ShowLaser(hit);
 
-                _reticle.SetActive(true);
-                _teleportReticleTransform.position = _hitPoint + _teleportReticleOffset;
-                _shouldTeleport = true;
+                // check to see if player is trying to teleport onto something that is currently in their hand
+                if (hit.transform.gameObject != _controller1Grab.GetObjectInHand() && hit.transform.gameObject != _controller2Grab.GetObjectInHand())
+                {
+                    _hitPoint = hit.point;
+
+                    // activate the teleport retcicule and set should teleport bool
+                    _reticle.SetActive(true);
+                    _teleportReticleTransform.position = _hitPoint + _teleportReticleOffset;
+                    _shouldTeleport = true;
+                }
             }
 
         }
@@ -91,13 +101,13 @@ public class LaserPointer : MonoBehaviour {
             _reticle.SetActive(false);
         }
 
-
+        // teleport button trigger
             if (_controller.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad) && _shouldTeleport)
             {
                 Teleport();
             }
 
-
+        // pause control
         if (!_isMenuScene)
         {
             if (_controller.GetPressDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
