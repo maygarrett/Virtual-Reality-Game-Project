@@ -13,6 +13,10 @@ public class GunShot : MonoBehaviour {
     private ParticleSystem _gunSparks1System;
     private ParticleSystem _gunSparks2System;
 
+    [SerializeField] private GameObject _explosion;
+
+    private AudioSource _audioSource;
+
 
 
     private Animation _gunAnimation;
@@ -24,6 +28,8 @@ public class GunShot : MonoBehaviour {
 
         _gunSparks1System = _gunSparks1.GetComponent<ParticleSystem>();
         _gunSparks2System = _gunSparks2.GetComponent<ParticleSystem>();
+
+        _audioSource = GetComponent<AudioSource>();
 
     }
 	
@@ -43,6 +49,8 @@ public class GunShot : MonoBehaviour {
 
     public void FireGun()
     {
+        _audioSource.Play();
+
         RaycastHit hit;
 
         Physics.Raycast(_raycastOrigin.position, _raycastOrigin.forward, out hit, 1000.0f);
@@ -69,8 +77,8 @@ public class GunShot : MonoBehaviour {
 
         if(hit.transform.gameObject.tag == "Explosive")
         {
-            //get reference to the explosion and set active
-            hit.transform.GetComponentInChildren<Transform>().gameObject.SetActive(true);
+            // instantiate an explosion
+            Instantiate(_explosion, hit.transform.gameObject.transform.position, hit.transform.rotation);
 
             // destroy the hit.gameobject
             Destroy(hit.transform.gameObject);

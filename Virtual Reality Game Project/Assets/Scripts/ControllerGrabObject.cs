@@ -74,23 +74,26 @@ public class ControllerGrabObject : MonoBehaviour {
     private void SetCollidingObject(Collider col)
     {
         // if the object already exists or doesnt have a rigidbody, return
-        if (_collidingObject || !col.GetComponent<Rigidbody>() || col.gameObject.tag != "PickUp" || col.gameObject.tag != "Key" || col.gameObject.tag != "Gun")
+        if (_collidingObject || !col.GetComponent<Rigidbody>() || col.gameObject.tag != "PickUp" && col.gameObject.tag != "Key" && col.gameObject.tag != "Gun")
         {
             return;
         }
         // otherwise set the object as something that may be picked up
         _collidingObject = col.gameObject;
+
     }
 
     // when an object enters the pick up trigger this function triggers
     public void OnTriggerEnter(Collider other)
     {
+        
         SetCollidingObject(other);
     }
 
     // when an object stays inside the pick up trigger
     public void OnTriggerStay(Collider other)
     {
+        
         SetCollidingObject(other);
     }
 
@@ -108,6 +111,7 @@ public class ControllerGrabObject : MonoBehaviour {
     // grabbing an object
     private void GrabObject()
     {
+        Debug.Log("calling grab object");
         // set object in hand to the object currently inside pick up trigger
         _objectInHand = _collidingObject;
         _collidingObject = null;

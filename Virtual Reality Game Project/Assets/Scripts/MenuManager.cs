@@ -33,5 +33,12 @@ public class MenuManager : MonoBehaviour {
     public void StartGame()
     {
         SceneManager.LoadScene(1);
+        SoundManager.instance.PlayMusic(SoundManager.instance._mountainsMusic);
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(0);
+        SoundManager.instance.PlayMusic(SoundManager.instance._menuMusic);
     }
 }

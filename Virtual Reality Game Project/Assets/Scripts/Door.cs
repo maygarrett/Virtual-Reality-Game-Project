@@ -11,6 +11,8 @@ public class Door : MonoBehaviour {
 
     private bool _isOpen;
 
+    private AudioSource _audioSource;
+
 	// Use this for initialization
 	void Start () {
 
@@ -30,6 +32,7 @@ public class Door : MonoBehaviour {
 
     public void OpenDoor()
     {
+        _audioSource.Play();
         int tempCounter = 0;
         while (tempCounter < (30 * 100))
         {

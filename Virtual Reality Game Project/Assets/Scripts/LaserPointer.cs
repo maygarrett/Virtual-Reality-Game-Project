@@ -72,12 +72,11 @@ public class LaserPointer : MonoBehaviour {
         // aiming the teleport lazer pointer
         if (_controller.GetPress(SteamVR_Controller.ButtonMask.Touchpad) && !_isPaused)
         {
-            Debug.Log("Initiating Teleport");
 
             RaycastHit hit;
 
             // raycast for teleport
-            if (Physics.Raycast(_trackedObj.transform.position, transform.forward, out hit, 100, _teleportMask))
+            if (Physics.Raycast(_trackedObj.transform.position, transform.forward, out hit, 100 /*, _teleportMask*/))
             {
                 //show laser first
                 ShowLaser(hit);
@@ -90,7 +89,11 @@ public class LaserPointer : MonoBehaviour {
                     // activate the teleport retcicule and set should teleport bool
                     _reticle.SetActive(true);
                     _teleportReticleTransform.position = _hitPoint + _teleportReticleOffset;
-                    _shouldTeleport = true;
+
+                    if (hit.transform.gameObject.layer == 8)
+                    {
+                        _shouldTeleport = true;
+                    }
                 }
             }
 
@@ -147,6 +150,10 @@ public class LaserPointer : MonoBehaviour {
                     else if (_buttonPressed.name == "StartGameButton")
                     {
                         GameObject.FindObjectOfType<ScreenFader>().EndScene(1);
+                    }
+                    else if (_buttonPressed.name == "MainMenuButton")
+                    {
+                        _menuManager.MainMenu();
                     }
                     else Debug.LogError("something weird going on with button " + _buttonPressed.name);
                 }
