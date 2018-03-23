@@ -36,7 +36,15 @@ public class ControllerGrabObject : MonoBehaviour {
         {
             if (_collidingObject)
             {
-                GrabObject();
+                if (!_objectInHand)
+                {
+                    GrabObject();
+                }
+
+                else if (_objectInHand.tag == "Gun")
+                {
+                    FireGun();
+                }
             }
         }
 
@@ -47,7 +55,6 @@ public class ControllerGrabObject : MonoBehaviour {
             {
                 if (_objectInHand.tag != "Gun")
                     ReleaseObject();
-                else FireGun();
             }
         }
 
@@ -59,8 +66,8 @@ public class ControllerGrabObject : MonoBehaviour {
                 {
 
                     _objectInHand.transform.parent = null;
-                    _controllerModel.SetActive(true);
                     ReleaseObject();
+                    _controllerModel.SetActive(true);
 
                 }
             }
