@@ -83,5 +83,10 @@ public class GunShot : MonoBehaviour {
             // destroy the hit.gameobject
             Destroy(hit.transform.gameObject);
         }
+
+        if(hit.transform.gameObject.tag == "Rope")
+        {
+            Destroy(hit.transform.gameObject);
+        }
     }
 }

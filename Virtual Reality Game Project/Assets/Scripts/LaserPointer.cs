@@ -78,6 +78,7 @@ public class LaserPointer : MonoBehaviour {
             // raycast for teleport
             if (Physics.Raycast(_trackedObj.transform.position, transform.forward, out hit, 100 /*, _teleportMask*/))
             {
+
                 //show laser first
                 ShowLaser(hit);
 
@@ -87,8 +88,8 @@ public class LaserPointer : MonoBehaviour {
                     _hitPoint = hit.point;
 
                     // activate the teleport retcicule and set should teleport bool
-                    _reticle.SetActive(true);
                     _teleportReticleTransform.position = _hitPoint + _teleportReticleOffset;
+                    _reticle.SetActive(true);
 
                     if (hit.transform.gameObject.layer == 8)
                     {
@@ -165,11 +166,11 @@ public class LaserPointer : MonoBehaviour {
 
     private void ShowLaser(RaycastHit hit)
     {
-        _laser.SetActive(true);
-        _laserTransform.position = Vector3.Lerp(_trackedObj.transform.position, _hitPoint, .5f);
-        _laserTransform.LookAt(_hitPoint);
+        _laserTransform.position = Vector3.Lerp(_trackedObj.transform.position, hit.point, .5f);
+        _laserTransform.LookAt(hit.point);
         _laserTransform.localScale = new Vector3(_laserTransform.localScale.x, _laserTransform.localScale.y,
             hit.distance);
+        _laser.SetActive(true);
     }
 
     private void Teleport()

@@ -14,6 +14,7 @@ TagManager:
   - CanDestroy
   - Robot
   - PickUp
+  - Rope
   layers:
   - Default
   - TransparentFX
