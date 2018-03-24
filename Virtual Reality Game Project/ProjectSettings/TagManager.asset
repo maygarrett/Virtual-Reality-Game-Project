@@ -15,6 +15,7 @@ TagManager:
   - Robot
   - PickUp
   - Rope
+  - OutOfBounds
   layers:
   - Default
   - TransparentFX

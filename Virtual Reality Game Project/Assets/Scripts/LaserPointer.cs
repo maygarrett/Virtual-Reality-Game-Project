@@ -46,6 +46,9 @@ public class LaserPointer : MonoBehaviour {
     // main menu variables
     [SerializeField] private bool _isMenuScene;
 
+    // out of bounds collider
+    private bool _outOfBounds = false;
+
     void Awake()
     {
         _trackedObj = GetComponent<SteamVR_TrackedObject>();
@@ -69,47 +72,51 @@ public class LaserPointer : MonoBehaviour {
             _isMenuScene = true;
         }
 
-        // aiming the teleport lazer pointer
-        if (_controller.GetPress(SteamVR_Controller.ButtonMask.Touchpad) && !_isPaused)
+        // if controller is within an out of bounds area, dont teleport
+        if (!_outOfBounds)
         {
-
-            RaycastHit hit;
-
-            // raycast for teleport
-            if (Physics.Raycast(_trackedObj.transform.position, transform.forward, out hit, 100 /*, _teleportMask*/))
+            // aiming the teleport lazer pointer
+            if (_controller.GetPress(SteamVR_Controller.ButtonMask.Touchpad) && !_isPaused)
             {
 
-                //show laser first
-                ShowLaser(hit);
+                RaycastHit hit;
 
-                // check to see if player is trying to teleport onto something that is currently in their hand
-                if (hit.transform.gameObject != _controller1Grab.GetObjectInHand() && hit.transform.gameObject != _controller2Grab.GetObjectInHand())
+                // raycast for teleport
+                if (Physics.Raycast(_trackedObj.transform.position, transform.forward, out hit, 100 /*, _teleportMask*/))
                 {
-                    _hitPoint = hit.point;
 
-                    // activate the teleport retcicule and set should teleport bool
-                    _teleportReticleTransform.position = _hitPoint + _teleportReticleOffset;
-                    _reticle.SetActive(true);
+                    //show laser first
+                    ShowLaser(hit);
 
-                    if (hit.transform.gameObject.layer == 8)
+                    // check to see if player is trying to teleport onto something that is currently in their hand
+                    if (hit.transform.gameObject != _controller1Grab.GetObjectInHand() && hit.transform.gameObject != _controller2Grab.GetObjectInHand())
                     {
-                        _shouldTeleport = true;
+                        _hitPoint = hit.point;
+
+                        // activate the teleport retcicule and set should teleport bool
+                        _teleportReticleTransform.position = _hitPoint + _teleportReticleOffset;
+                        _reticle.SetActive(true);
+
+                        if (hit.transform.gameObject.layer == 8)
+                        {
+                            _shouldTeleport = true;
+                        }
                     }
                 }
+
+            }
+            else
+            {
+                _laser.SetActive(false);
+                _reticle.SetActive(false);
             }
 
-        }
-        else
-        {
-            _laser.SetActive(false);
-            _reticle.SetActive(false);
-        }
-
-        // teleport button trigger
+            // teleport button trigger
             if (_controller.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad) && _shouldTeleport)
             {
                 Teleport();
             }
+        }
 
         // pause control
         if (!_isMenuScene)
@@ -199,6 +206,21 @@ public class LaserPointer : MonoBehaviour {
         {
             Time.timeScale = 1;
             _pauseMenuCanvas.gameObject.SetActive(false);
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.gameObject.tag == "OutOfBounds")
+        {
+            _outOfBounds = true;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.tag == "OutOfBounds")
+        {
+            _outOfBounds = false;
         }
     }
 }

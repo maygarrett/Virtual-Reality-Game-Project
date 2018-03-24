@@ -15,7 +15,7 @@ public class Door : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+        _audioSource = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
