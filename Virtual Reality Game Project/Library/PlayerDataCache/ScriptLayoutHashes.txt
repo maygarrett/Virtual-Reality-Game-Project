@@ -154,6 +154,7 @@ dea1f50129720480e0f43a3e995ef93b Assembly-CSharp.dll:Valve.VR.InteractionSystem.
 2da85cb77e5468d9e881e5c9e658ca62 Assembly-CSharp.dll:Valve.VR.InteractionSystem.InteractableHoverEvents
 1f7a431e2575b10af07765c492eb540f Assembly-CSharp.dll:Valve.VR.InteractionSystem.LinearBlendshape
 5ec9e04b02976cda964e8d4056595f3d Assembly-CSharp.dll:Valve.VR.InteractionSystem.ControllerHoverHighlight
+4f0816757ff27e1688c8b9777abfaa85 Assembly-CSharp.dll:.BoundaryRemoval
 6e83a87ced434693cbcbb73efeba1681 Assembly-CSharp.dll:Valve.VR.InteractionSystem.ControllerButtonHints
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:Valve.VR.InteractionSystem.DontDestroyOnLoad
 fc9f23fd5ae91411823ddeca9b7a12af Assembly-CSharp.dll:.Door
